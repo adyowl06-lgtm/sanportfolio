@@ -1,6 +1,10 @@
 {
     "private": true,
+    "engines": {
+        "node": "20.x"
+    },
     "scripts": {
+        "postinstall-cmd": "php artisan k:g",
         "dev": "npm run development",
         "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --config=node_modules/laravel-mix/setup/webpack.config.js",
         "watch": "npm run development -- --watch",
