@@ -1,9 +1,9 @@
 <?php
 
-// Set direktori penyimpanan sementara di folder /tmp Vercel
+// 1. Buat struktur folder temporary di /tmp untuk Vercel
 $storageDirs = [
-    '/tmp/storage/app',
-    '/tmp/storage/framework/cache',
+    '/tmp/storage/app/public',
+    '/tmp/storage/framework/cache/data',
     '/tmp/storage/framework/sessions',
     '/tmp/storage/framework/views',
     '/tmp/storage/logs',
@@ -16,21 +16,25 @@ foreach ($storageDirs as $dir) {
     }
 }
 
-// Environment override untuk Vercel
+// 2. Set environment path storage & cache ke /tmp
+putenv('APP_STORAGE=/tmp/storage');
+putenv('VIEW_COMPILED_PATH=/tmp/storage/framework/views');
 $_ENV['APP_STORAGE'] = '/tmp/storage';
-$_ENV['APP_SERVICES_CACHE'] = '/tmp/bootstrap/cache/services.php';
-$_ENV['APP_PACKAGES_CACHE'] = '/tmp/bootstrap/cache/packages.php';
-$_ENV['APP_CONFIG_CACHE'] = '/tmp/bootstrap/cache/config.php';
-$_ENV['APP_ROUTES_CACHE'] = '/tmp/bootstrap/cache/routes.php';
 
 require __DIR__ . '/../vendor/autoload.php';
 $app = require_once __DIR__ . '/../bootstrap/app.php';
 
-// Menangani permintaan HTTP
+// 3. Bind jalur storage dan bootstrap cache secara eksplisit
+$app->useStoragePath('/tmp/storage');
+$app->useBootstrapPath('/tmp/bootstrap');
+
+// 4. Jalankan HTTP Kernel
 $kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
+
 $response = $kernel->handle(
     $request = Illuminate\Http\Request::capture()
 );
 
 $response->send();
+
 $kernel->terminate($request, $response);
