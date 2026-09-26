@@ -30,7 +30,7 @@ class PortfolioController extends Controller
             // Pengecekan otomatis ekstensi file gambar
             foreach ($extensions as $ext) {
                 $check_path = 'images/software/' . $sw['file'] . '.' . $ext;
-                if (file_exists(public_path($check_path))) {
+                if ((public_path($check_path))) {
                     $icon_path = $check_path;
                     break;
                 }
