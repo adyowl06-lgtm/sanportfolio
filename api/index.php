@@ -1,6 +1,6 @@
 <?php
 
-// Buat folder temporer untuk cache Laravel di Vercel
+// Set direktori penyimpanan sementara di folder /tmp Vercel
 $storageDirs = [
     '/tmp/storage/app',
     '/tmp/storage/framework/cache',
@@ -16,6 +16,7 @@ foreach ($storageDirs as $dir) {
     }
 }
 
+// Environment override untuk Vercel
 $_ENV['APP_STORAGE'] = '/tmp/storage';
 $_ENV['APP_SERVICES_CACHE'] = '/tmp/bootstrap/cache/services.php';
 $_ENV['APP_PACKAGES_CACHE'] = '/tmp/bootstrap/cache/packages.php';
@@ -25,6 +26,7 @@ $_ENV['APP_ROUTES_CACHE'] = '/tmp/bootstrap/cache/routes.php';
 require __DIR__ . '/../vendor/autoload.php';
 $app = require_once __DIR__ . '/../bootstrap/app.php';
 
+// Menangani permintaan HTTP
 $kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
 $response = $kernel->handle(
     $request = Illuminate\Http\Request::capture()
